@@ -1,13 +1,6 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useState } from "react";
-import {
-  Routes,
-  Route,
-  Link,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, Link, Navigate, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 import AppBar from "@mui/material/AppBar";
@@ -21,6 +14,15 @@ import { MovieList } from "./MovieList";
 import { PageNotFound } from "./PageNotFound";
 import { Home } from "./Home";
 import { MovieDetails } from "./MovieDetails";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { EditMovie } from "./EditMovie";
+import { Basicform } from "./Basicform";
 
 function App() {
   const names = ["sanket", "vaibhav", "swapnil", "balaji"];
@@ -53,6 +55,7 @@ function App() {
 
   const Intial_MovieList = [
     {
+      id: "100",
       name: "RRR",
       poster:
         "https://englishtribuneimages.blob.core.windows.net/gallary-content/2021/6/Desk/2021_6$largeimg_977224513.JPG",
@@ -62,6 +65,17 @@ function App() {
       trailer: "https://www.youtube.com/embed/f_vbAtFSEc0",
     },
     {
+      id: "101",
+      name: "Avatar: The Way of Water",
+      poster:
+        "https://upload.wikimedia.org/wikipedia/en/5/54/Avatar_The_Way_of_Water_poster.jpg",
+      rating: 9.3,
+      summary:
+        "Jake Sully and Ney'tiri have formed a family and are doing everything to stay together. However, they must leave their home and explore the regions of Pandora. When an ancient threat resurfaces, Jake must fight a difficult war against the humans.",
+      trailer: "https://www.youtube.com/embed/o5F8MOz_IDw",
+    },
+    {
+      id: "102",
       name: "Iron man 2",
       poster:
         "https://m.media-amazon.com/images/M/MV5BMTM0MDgwNjMyMl5BMl5BanBnXkFtZTcwNTg3NzAzMw@@._V1_FMjpg_UX1000_.jpg",
@@ -71,6 +85,17 @@ function App() {
       trailer: "https://www.youtube.com/embed/wKtcmiifycU",
     },
     {
+      id: "103",
+      name: "The Shawshank Redemption",
+      poster:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo8W10Lh_o-ZAEMnELvM_a5txQINdiU7vaat2IsjanUi5nOvFD5e7lzUhm32RRq-Gijcw&usqp=CAU",
+      rating: 9.3,
+      summary:
+        "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+      trailer: "https://www.youtube.com/embed/NmzuHjWmXOc",
+    },
+    {
+      id: "104",
       name: "No Country for Old Men",
       poster:
         "https://upload.wikimedia.org/wikipedia/en/8/8b/No_Country_for_Old_Men_poster.jpg",
@@ -80,6 +105,7 @@ function App() {
       trailer: "https://www.youtube.com/embed/38A__WT3-o0",
     },
     {
+      id: "105",
       name: "Jai Bhim",
       poster:
         "https://m.media-amazon.com/images/M/MV5BY2Y5ZWMwZDgtZDQxYy00Mjk0LThhY2YtMmU1MTRmMjVhMjRiXkEyXkFqcGdeQXVyMTI1NDEyNTM5._V1_FMjpg_UX1000_.jpg",
@@ -89,6 +115,7 @@ function App() {
       trailer: "https://www.youtube.com/embed/nnXpbTFrqXA",
     },
     {
+      id: "106",
       name: "The Avengers",
       rating: 8,
       summary:
@@ -98,6 +125,7 @@ function App() {
       trailer: "https://www.youtube.com/embed/eOrNdBpGMv8",
     },
     {
+      id: "107",
       name: "Interstellar",
       poster: "https://m.media-amazon.com/images/I/A1JVqNMI7UL._SL1500_.jpg",
       rating: 8.6,
@@ -106,6 +134,7 @@ function App() {
       trailer: "https://www.youtube.com/embed/zSWdZVtXT7E",
     },
     {
+      id: "108",
       name: "Baahubali",
       poster: "https://flxt.tmsimg.com/assets/p11546593_p_v10_af.jpg",
       rating: 8,
@@ -114,6 +143,7 @@ function App() {
       trailer: "https://www.youtube.com/embed/sOEg_YZQsTI",
     },
     {
+      id: "109",
       name: "Ratatouille",
       poster:
         "https://resizing.flixster.com/gL_JpWcD7sNHNYSwI1ff069Yyug=/ems.ZW1zLXByZC1hc3NldHMvbW92aWVzLzc4ZmJhZjZiLTEzNWMtNDIwOC1hYzU1LTgwZjE3ZjQzNTdiNy5qcGc=",
@@ -128,30 +158,51 @@ function App() {
 
   const Navigate = useNavigate();
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <AppBar position="static">
-          <Toolbar>
-            <Button color="inherit" onClick={() => Navigate("/")}>
-              Home
-            </Button>
-            <Button color="inherit" onClick={() => Navigate("/movieList")}>
-              Movie-app
-            </Button>
-            <Button color="inherit" onClick={() => Navigate("/movieList/id")}>
-              Movie-details
-            </Button>
-            <Button
-              color="inherit"
-              onClick={() => Navigate("/movieList/addmovie")}
-            >
-              Add Movie
-            </Button>
-          </Toolbar>
-        </AppBar>
+  const [mode, setMode] = useState("dark");
 
-        <nav>
+  const Theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  });
+
+  return (
+    <ThemeProvider theme={Theme}>
+      <Paper elevation={5} style={{ minHeight: "100vh" }}>
+        <div className="App">
+          <header className="App-header">
+            <AppBar position="static">
+              <Toolbar>
+                <Button color="inherit" onClick={() => Navigate("/")}>
+                  Home
+                </Button>
+                <Button color="inherit" onClick={() => Navigate("/movieList")}>
+                  Movie-app
+                </Button>
+                <Button color="inherit" onClick={() => Navigate("/movieList/basic-form")}>
+                  Basic Form
+                </Button>
+                <Button
+                  color="inherit"
+                  onClick={() => Navigate("/movieList/addmovie")}
+                >
+                  Add Movie
+                </Button>
+
+                <Button
+                  className="Mode-setting"
+                  color="inherit"
+                  onClick={() => setMode(mode === "light" ? "dark" : "light")}
+                  startIcon={
+                    mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />
+                  }
+                >
+                  {mode === "light" ? "dark" : "light"} mode
+                </Button>
+              </Toolbar>
+            </AppBar>
+
+            {/* <nav>
           <ul>
             <li>
               <Link to="/">Home</Link>
@@ -163,33 +214,32 @@ function App() {
               <Link to="/movieList/id">Movie-details</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/movieList/:id"
-            element={<MovieDetails movieList={movieList} />}
-          />
+            <section className="section-container">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/movieList/:id" element={<MovieDetails />} />
+                <Route path="/movieList/basic-form" element={<Basicform />} />
+                <Route path="/movieList/edit/:id" element={<EditMovie/>} />
+                <Route path="/TicTacToe" element={<TicTacToe />} />
 
-          < Route
-            path="/movieList/addmovie"
-            element={<Add_Movie movieList={movieList} setMovieList={setMovieList}/>}
-          />
-          <Route path="/404" element={<PageNotFound />} />
-          {/* <Route path = "*" element = {<Navigate replace to="/404"/>}/> */}
-          <Route
-            path="/movieList"
-            element={
-              <MovieList movieList={movieList} setMovieList={setMovieList} />
-            }
-          />
-        </Routes>
-
-        {/* <MovieList movieList={movieList} setMovieList={setMovieList} /> */}
-      </header>
-    </div>
+                <Route path="/movieList/addmovie" element={<Add_Movie />} />
+                <Route path="/404" element={<PageNotFound />} />
+                {/* <Route path = "*" element = {<Navigate replace to="/404"/>}/> */}
+                <Route path="/movieList" element={<MovieList />} />
+              </Routes>
+              {/* <MovieList movieList={movieList} setMovieList={setMovieList} /> */}
+            </section>
+          </header>
+        </div>
+      </Paper>
+    </ThemeProvider>
   );
+}
+
+function TicTacToe() {
+  return <h1>Fun Game </h1>;
 }
 
 export default App;
