@@ -1,0 +1,88 @@
+.App {
+  text-align: center;
+  /* display: flex; */
+}
+
+.profile_pic{
+  height : 450px;
+  width : 450px;
+  border-radius: 50%;
+  object-fit:cover ;
+}
+
+p{
+  font-size : large;
+  font-family: Arial, Helvetica, sans-serif;
+  font-style: italic;
+  text-align: center;
+}
+
+.profile_pic:hover{
+  transform: scale(1.1);
+}
+
+.counter-container{
+  justify-content: center; 
+  display: flex;
+  gap : 20px;
+}
+
+.like-button {
+  padding : 2px;
+  margin-top : 5px;
+}
+.dislike-button{
+  padding : 2px;
+  margin-top : 5px; 
+}
+
+.movie-poster{
+  object-fit: cover;
+  width: 350px;
+  height : 600px;
+}
+
+.movie-container{
+  /* border: 1px solid Black; */
+  width: 350px;
+}
+
+.movie-space{
+  display: flex;
+  margin-top: 0px;
+}
+
+.movie-name{
+  font-family :Arial, Helvetica, sans-serif;
+  float:left;
+}
+
+.movie-rating{
+  font-size: 18px;
+  float:right;
+}
+
+.movie-summary{
+  margin : 0px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: x-small;
+}
+
+.movie-list{
+  display: flex;
+  flex-wrap: wrap;
+  gap :10px;
+  justify-content: space-around;
+}
+
+.Add-movie-form{
+  display : flex;
+  flex-direction: column;
+  gap: 15px;
+  padding : 50px;
+}
+
+.counter-container{
+  display:flex;
+  gap:20px;
+}
